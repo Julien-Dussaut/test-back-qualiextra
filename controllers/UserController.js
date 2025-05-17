@@ -51,7 +51,7 @@ exports.userCreate = async (req, res, next) => {
 
     const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT}`;
     const verificationLink = `${baseUrl}/verify-email/${verificationTokenRaw}`;
-    
+
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: user.email,
@@ -93,8 +93,8 @@ exports.userVerify = async (req, res, next) => {
 
 exports.userRead = async (req, res, next) => {
   try {
-    const requestedUserId = req.params.id;
-    const requestingUserId = req.auth.userId;
+    const requestedUserId = Number(req.params.id);
+    const requestingUserId = Number(req.auth.userId);
 
     // Check if the user can see the data (same user or admin = ok, else = no)
     const userCanPerformAction = await utils.checkUserStatus(requestedUserId, requestingUserId);
@@ -119,9 +119,9 @@ exports.userRead = async (req, res, next) => {
 
 exports.userUpdate = async (req, res, next) => {
   try {
-    const requestedUserId = req.params.id;
-    const requestingUserId = req.auth.userId;
-    const updateData = req.body;
+    const requestedUserId = Number(req.params.id);
+    const requestingUserId = Number(req.auth.userId);
+    const updateData = { ...req.body };
 
     // Check if the user can update data (same user or admin = ok, else = no)
     const userCanPerformAction = await utils.checkUserStatus(requestedUserId, requestingUserId);
@@ -138,6 +138,17 @@ exports.userUpdate = async (req, res, next) => {
       throw error;
     }
 
+    if (updateData.password) {
+      
+      try {
+        const hashedPassword = await bcrypt.hash(updateData.password, 10);
+        updateData.password = hashedPassword;
+      } catch (err) {
+        const error = new Error('Erreur lors du hashage du mot de passe.');
+        error.statusCode = 500;
+        throw error;
+      }
+    }
     await user.update(updateData);
 
     res.status(200).json({ message: 'Utilisateur mis à jour avec succès.', user });
