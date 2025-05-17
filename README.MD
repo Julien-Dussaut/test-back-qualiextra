@@ -1,5 +1,7 @@
 # API REST TEST BACK QUALIEXTRA
 
+The API is already deployed and accessible at this url : <https://test-back-qualiextra.onrender.com>. Documentation is available [here](https://test-back-qualiextra.onrender.com).
+
 ## This file will help you to install, configure and start the API
 
 >Before you start, make sure you have node installed on your computer.
@@ -37,6 +39,8 @@
     ```node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"```
   - Declare a JWT_SECRET variable and past the output in the previous code in it
     - Example :  ```JWT_SECRET="mqslkfdlmqskjdfldsqqs6df46qsd54f6qs5d4"```
+  - In case of a production deployement, you also need to declare a variable for the base url
+    - Example : ```BASE_URL="DOMAIN WHERE API IS DEPLOYED"```
   - Your .env file should look like this :
       >
       >PORT=3000
@@ -48,6 +52,8 @@
       >PASS="YOUR EMAIL PASSWORD OR API CODE"
       >
       >JWT_SECRET="6a6fb1f2ef5a51491c715d47e18f4fa24ea69b713a269c0a8749d24c50508c70003aee062f7d9fe37b8809897f7f757ebb870784369cdf2e147e9be4ea854a94"
+      >
+      >BASE_URL="<https://example.com>"
       >
 - Start the application with the command ```nodemon server```
 - The API is now running on the port you specified in your .env file (or on the port 3000 if you didn't specify any)

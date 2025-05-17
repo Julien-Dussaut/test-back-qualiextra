@@ -49,7 +49,9 @@ exports.userCreate = async (req, res, next) => {
       },
     });
 
-    const verificationLink = `http://localhost:${process.env.PORT}/verify-email/${verificationTokenRaw}`;
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT}`;
+    const verificationLink = `${baseUrl}/verify-email/${verificationTokenRaw}`;
+    
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: user.email,
