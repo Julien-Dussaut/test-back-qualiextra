@@ -26,7 +26,6 @@ module.exports = (req, res, next) => {
       throw error;
     }
     
-    next();
   } catch (error) {
     next(error);
   }
