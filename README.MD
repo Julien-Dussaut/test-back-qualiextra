@@ -24,7 +24,7 @@
 
 - Clone the repository on your machine ```git clone REPOSITORY_URL```
 - Navigate to the local repository you just cloned and type ```npm install``` in your terminal
-- Create a .env file at the root of the project and set the environnement variables as explained below
+- Create a .env file or copy / paste the ```.env.example``` file and remove ```.example``` at the root of the project and set the environnement variables as explained below
   - Declare a PORT variable and indicate the port number you want the application run (fallback will be 3000)
     - Example :  ```PORT=3000```
   - Declare an SERVICE_EMAIL variable with the name of the mail service you're want to use (you'll find at the bottom of this file a list of the common mail services to avoid any typo mistake)
