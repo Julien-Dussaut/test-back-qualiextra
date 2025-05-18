@@ -330,4 +330,57 @@
  *                   type: string
  *               example:
  *                 error: Token de vérification invalide.
+* /resend-email:
+ *   post:
+ *     tags: [Users]
+ *     summary: Resend verification email to user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address
+ *           example:
+ *             email: user@example.com
+ *     responses:
+ *       200:
+ *         description: Verification email sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *               example:
+ *                 message: Email de vérification renvoyé avec succès.
+ *       400:
+ *         description: Bad request (missing email or user already verified)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Cet utilisateur est déjà vérifié.
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *               example:
+ *                 error: Aucun utilisateur trouvé avec cette adresse email.
  */

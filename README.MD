@@ -58,6 +58,7 @@ The API is already deployed and accessible at this url : <https://test-back-qual
 - Start the application with the command ```nodemon server```
 - The API is now running on the port you specified in your .env file (or on the port 3000 if you didn't specify any)
 - The documentation is available at this url : <http://localhost:YOUR_PORT_NUMBER/api-docs>
+- Database is in sqlite so there is no need to configure it
 - Three users are automatically created when the API is started
   >Ada Lovelave
   >

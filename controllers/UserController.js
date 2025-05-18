@@ -175,3 +175,58 @@ exports.userDelete = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.resendVerificationEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email) {
+      const error = new Error('L\'adresse email est requise.');
+      error.statusCode = 400;
+      throw error;
+    }
+    
+    const user = await User.findOne({ where: { email } });
+    
+    if (!user) {
+      const error = new Error('Aucun utilisateur trouvé avec cette adresse email.');
+      error.statusCode = 404;
+      throw error;
+    }
+    
+    if (user.isVerified) {
+      const error = new Error('Cet utilisateur est déjà vérifié.');
+      error.statusCode = 400;
+      throw error;
+    }
+    
+    const verificationTokenRaw = crypto.randomBytes(32).toString('hex');
+    
+    const verificationTokenHashed = crypto.createHash('sha256').update(verificationTokenRaw).digest('hex');
+    
+    user.verificationToken = verificationTokenHashed;
+    await user.save();
+    
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+    });
+    
+    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT}`;
+    const verificationLink = `${baseUrl}/verify-email/${verificationTokenRaw}`;
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: user.email,
+      subject: 'Vérification de votre email',
+      text: `Cliquez sur ce lien pour vérifier votre email : ${verificationLink}`,
+    });
+    
+    res.status(200).json({ message: 'Email de vérification renvoyé avec succès.' });
+  } catch (error) {
+    next(error);
+  }
+};

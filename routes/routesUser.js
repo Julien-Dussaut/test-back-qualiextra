@@ -3,8 +3,10 @@ const router = express.Router();
 
 const auth = require('../middlewares/Auth');
 const isAdmin = require('../middlewares/isAdmin');
-const userController = require('../controllers/UserController');
 const { validateUserCreate, validateUserUpdate, handleValidationErrors } = require('../middlewares/userValidator');
+const { resendEmailLimiter } = require('../middlewares/security');
+
+const userController = require('../controllers/UserController');
 
 router.get('/users/list', auth, isAdmin, userController.userList);
 router.post('/users/create', validateUserCreate, handleValidationErrors, userController.userCreate);
@@ -13,5 +15,6 @@ router.patch('/users/:id', auth, validateUserUpdate, handleValidationErrors, use
 router.delete('/users/:id', auth, isAdmin, userController.userDelete);
 
 router.get('/verify-email/:token', userController.userVerify);
+router.post('/resend-email', resendEmailLimiter, userController.resendVerificationEmail);
 
 module.exports = router;
